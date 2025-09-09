@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Astra</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h3>Constellation &quot;{{ constellationFigure.name }}&quot; ({{ constellationFigure.name_lat }})</h3>
+<table cellspacing="10">
+    <tr>
+        <th>Astra list</th>
+        <th>Link list</th>
+        <th>Image</th>
+    </tr>
+    <tr>
+        <td valign="top">
+            <table cellspacing="3">
+                <tr>
+                    <th>id</th>
+                    <th>declination</th>
+                    <th>longitude</th>
+                    <th>(hh:mm)</th>
+                    <th>Bayer</th>
+                    <th>name</th>
+                    <th>magnitude</th>
+                </tr>
+            {% for astra in astraList %}
+                <tr>
+                    <td>{{ astra.star_id }}</td>
+                    <td>{{ astra.declination }}</td>
+                    <td>{{ astra.lon_rounded }}</td>
+                    <td>{{ astra.hh_mm }}</td>
+                    <td>{{ astra.bayer }}</td>
+                    <td>{{ astra.name }}</td>
+                    <td>{{ astra.mag }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </td>
+        <td valign="top">
+            <table cellspacing="3">
+                <tr>
+                    <th>Start</th>
+                    <th>End</th>
+            {% for link in links %}
+                <tr>
+                    <td>{{ link.link_start }}</td>
+                    <td>{{ link.link_end }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </td>
+        <td valign="top">
+            <img width="70%" src="/static/img/constellations/{{ constellationFigure.abbr.upper() }}.gif"/>
+        </td>
+    </tr>
+</table>
+<a href="/constellation">Home</a>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head lang="en">
+    <title>Constellations</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Constellations</h1>
+<table>
+    <tr>
+        {% for constellations in constellationsList %}
+        <td valign="top"style="padding-left:10px;padding-right:10px;">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>NameLat</th>
+                    <th>Image</th>
+                </tr>
+                {% for constellation in constellations %}
+                <tr>
+                    <td>
+                        <a href="/constellation/{{ constellation.abbr }}">{{ constellation.name }}</a>
+                    </td>
+                    <td>{{ constellation.name_lat }}</td>
+                    <td>
+                        <a href="/static/img/constellations/{{ constellation.abbr.upper() }}.gif">{{ constellation.abbr }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+<a href="/constellation">Home</a>
+</body>
+</html>

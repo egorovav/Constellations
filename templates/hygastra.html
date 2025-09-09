@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head lang="en">
+    <title>Astra</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h2>HYG Astra Catalog</h2>
+<table>
+    <tr>
+        <th>
+            {% if sort_column != 'star_id' %}
+                <a href="/constellation/hygastra/star_id/{{ page_number }}">id</a>
+            {% else %}
+                <a href="/constellation/hygastra/star_id/{{ page_number }}" style="text-decoration:none">id</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'hd' %}
+                <a href="/constellation/hygastra/hd/{{ page_number }}">H.D. catalog</a>
+            {% else %}
+                <a href="/constellation/hygastra/hd/{{ page_number }}" style="text-decoration:none">H.D. catalog</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'declination' %}
+                <a href="/constellation/hygastra/declination/{{ page_number }}">declination</a>
+            {% else %}
+                <a href="/constellation/hygastra/declination/{{ page_number }}" style="text-decoration:none">declination</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'lon' %}
+                <a href="/constellation/hygastra/lon/{{ page_number }}">longitude</a>
+            {% else %}
+                <a href="/constellation/hygastra/lon/{{ page_number }}" style="text-decoration:none">longitude</a>
+            {% endif %}
+        </th>
+        <th>(hh:mm)</th>
+                </th>
+        <th>
+            {% if sort_column != 'ra' %}
+                <a href="/constellation/hygastra/ra/{{ page_number }}">right ascension</a>
+            {% else %}
+                <a href="/constellation/hygastra/ra/{{ page_number }}" style="text-decoration:none">right ascension</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'dist' %}
+                <a href="/constellation/hygastra/dist/{{ page_number }}">distance (pc)</a>
+            {% else %}
+                <a href="/constellation/hygastra/dist/{{ page_number }}" style="text-decoration:none">distance (pc)</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'mag' %}
+                <a href="/constellation/hygastra/mag/{{ page_number }}">magnitude</a>
+            {% else %}
+                <a href="/constellation/hygastra/mag/{{ page_number }}" style="text-decoration:none">magnitude</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'proper' %}
+                <a href="/constellation/hygastra/proper/{{ page_number }}">proper</a>
+            {% else %}
+                <a href="/constellation/hygastra/proper/{{ page_number }}" style="text-decoration:none">proper</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'bayer' %}
+                <a href="/constellation/hygastra/bayer/{{ page_number }}">Bayer</a>
+            {% else %}
+                <a href="/constellation/hygastra/bayer/{{ page_number }}" style="text-decoration:none">Bayer</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'con' %}
+                <a href="/constellation/hygastra/con/{{ page_number }}">constellation</a>
+            {% else %}
+                <a href="/constellation/hygastra/con/{{ page_number }}" style="text-decoration:none">constellation</a>
+            {% endif %}
+        </th>
+    </tr>
+    {% for astra in page_content %}
+    <tr>
+        <td>{{ astra.star_id }}</td>
+        <td>{{ astra.hd_non_empty }}</td>
+        <td>{{ astra.declination }}</td>
+        <td>{{ astra.lon_rounded }}</td>
+        <td>{{ astra.hh_mm }}</td>
+        <td>{{ astra.ra }}</td>
+        <td>{{ astra.dist }}</td>
+        <td>{{ astra.mag }}</td>
+        <td>{{ astra.name }}</td>
+        <td>{{ astra.bayer_non_empty }}</td>
+        <td>
+            <a href="/constellation/{{ astra.con }}">{{ astra.con }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<table>
+    <tr>
+        {% for page_num in page_numbers %}
+        <td>
+                {% if page_num > 0 %}
+                    {% if page_num != page_number %}
+                        <a href="/constellation/hygastra/{{ sort_column }}/{{ page_num }}">{{ page_num }}</a>
+                    {% else %}
+                        <a href="/constellation/hygastra/{{ sort_column }}/{{ page_num }}" style="text-decoration:none">{{ page_num }} </a>
+                    {% endif %}
+                {% endif %}
+                {% if page_num == 0 %}
+                    <p>...</p>
+                {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+<a href="/constellation">Home</a>
+</body>
+</html>
