@@ -4,15 +4,15 @@ import json
 import os
 import constellation_repository as repo
 
-constellation_controller = Flask(__name__)
+app = Flask(__name__)
 
 repository = repo.ConstellationRepository()
 
-@constellation_controller.route("/constellation")
+@app.route("/constellation")
 def home():
    return render_template("index.html")
 
-@constellation_controller.route("/constellation/map")
+@app.route("/constellation/map")
 def map():
   constellations = repository.get_all_constellations_geojson()
   constellations_geojson = {"type": "FeatureCollection", "features": constellations}
@@ -32,14 +32,14 @@ def map():
                             multiPolygonBorders=multipoligon_borders,
                             astra=stars_geojson)
 
-@constellation_controller.route("/constellation/list")
+@app.route("/constellation/list")
 def list():
   constellations = repository.get_all_constellations()
   row_count = len(constellations) // 3
   constellations = [constellations[:row_count], constellations[row_count:row_count * 2], constellations[row_count * 2:]]
   return render_template("constellations.html", constellationsList=constellations)
 
-@constellation_controller.route("/constellation/<abbr>")
+@app.route("/constellation/<abbr>")
 def constellation(abbr):
    constellation_stars = sorted(repository.get_hygdata_by_abbr(abbr), key=lambda x: x.mag)
    constellation_links = repository.get_constellation_links(abbr)
@@ -49,7 +49,7 @@ def constellation(abbr):
                           links=constellation_links, 
                           constellationFigure=constellation)
 
-@constellation_controller.route("/constellation/hygastra/<sort_column>/<page_number>")
+@app.route("/constellation/hygastra/<sort_column>/<page_number>")
 def hygastra(sort_column, page_number):
    sort_column = sort_column if sort_column else "mag"
    page_number = int(page_number) if page_number else 1
@@ -75,4 +75,4 @@ def hygastra(sort_column, page_number):
 
 
 if __name__ == "__main__":
-    constellation_controller.run(debug=True)
+    app.run(debug=True)
