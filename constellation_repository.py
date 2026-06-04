@@ -9,6 +9,7 @@ from types import SimpleNamespace
 class ConstellationRepository:
     def __init__(self):
         self.engine = al.create_engine("sqlite:///astradatabase.db")
+        self.engine = al.create_engine("sqlite:///astradatabase.db")
         self.transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
     
     def transform_4326_to_3857(self, lon, lat):
