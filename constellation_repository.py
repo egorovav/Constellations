@@ -2,14 +2,17 @@ import json
 import sqlalchemy as al
 import constellation_model as m
 from pyproj import Transformer
+from datetime import datetime, timezone
+from sqlalchemy import literal
+from types import SimpleNamespace
 
 class ConstellationRepository:
     def __init__(self):
-        self.engine = al.create_engine("sqlite:///Constellations/astradatabase.db")
+        self.engine = al.create_engine("sqlite:///astradatabase.db")
         self.transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
     
     def transform_4326_to_3857(self, lon, lat):
-        """Преобразует координаты из EPSG:4326 (WGS84) в EPSG:3857 (Web Mercator)"""
+        #Преобразует координаты из EPSG:4326 (WGS84) в EPSG:3857 (Web Mercator)
         return self.transformer.transform(lon, lat)
     
     def get_constellation_by_abbr(self, abbr):
@@ -193,3 +196,20 @@ class ConstellationRepository:
                 'per_page': per_page,
                 'pages': (total + per_page - 1) // per_page
             }
+        
+    @staticmethod
+    def get_astra(row):
+        return SimpleNamespace(**row._asdict())
+        
+    def get_all_coordinates(self):
+        with al.orm.Session(self.engine) as session:
+            rows = session.query(
+                m.HygData.star_id, m.HygData.x, m.HygData.y, m.HygData.z, literal(0).label("dist"), literal(0).label("skip")
+                ).filter(
+                    m.HygData.x != None, m.HygData.y != None, m.HygData.z != None
+                )
+            return list(map(self.get_astra, rows))
+        
+    def get_hygdata_by_star_ids(self, star_ids):
+        with al.orm.Session(self.engine) as session:
+            return session.query(m.HygData).filter(m.HygData.star_id.in_(star_ids)).all()

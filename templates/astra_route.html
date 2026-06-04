@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Astra</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+    <h3>Astra route.</h3>
+    <form action="{{ url_for('astra_route') }}" method="POST">
+    <table cellspacing="10">
+        <tr>
+            <td>Origin ID:</td><td><input type="number" name="origin_id" /></td>
+        </tr>
+        <tr>
+            <td>Destination ID:</td><td><input type="number" name="destination_id" /></td>
+        </tr>
+        <tr>
+            <td>Max step length:</td><td><input type="text" name="max_step_length" /></td>
+        </tr>
+        <tr><td colspan="2"><button type="submit">Search route</button></td></tr>
+    </table>
+    </form>
+    {% if origin_id is not none %}
+        <h4>Route from {{ origin_id }} to {{ destination_id }} with max step length {{ max_step_length }}.</h4>
+        {% if astra_route_items %}
+            <table cellspacing="3">
+                <tr>
+                    <th>id</th>
+                    <th>x</th>
+                    <th>y</th>
+                    <th>z</th>
+                    <th>distance</th>
+                </tr>
+            {% for astra in astra_route_items %}
+                <tr>
+                    <td>{{ astra.star_id }}</td>
+                    <td>{{ astra.x }}</td>
+                    <td>{{ astra.y }}</td>
+                    <td>{{ astra.z }}</td>
+                    <td>{{ astra.dist }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            <p style="color: red;">Route not found.</p>
+        {% endif %}
+    {% endif %}
+<a href="/constellation">Home</a>
+</body>
+</html>

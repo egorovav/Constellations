@@ -73,6 +73,27 @@
                 <a href="/constellation/hygastra/bayer/{{ page_number }}" style="text-decoration:none">Bayer</a>
             {% endif %}
         </th>
+                <th>
+            {% if sort_column != 'x' %}
+                <a href="/constellation/hygastra/x/{{ page_number }}">x</a>
+            {% else %}
+                <a href="/constellation/hygastra/x/{{ page_number }}" style="text-decoration:none">x</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'y' %}
+                <a href="/constellation/hygastra/y/{{ page_number }}">y</a>
+            {% else %}
+                <a href="/constellation/hygastra/y/{{ page_number }}" style="text-decoration:none">y</a>
+            {% endif %}
+        </th>
+        <th>
+            {% if sort_column != 'z' %}
+                <a href="/constellation/hygastra/z/{{ page_number }}">z</a>
+            {% else %}
+                <a href="/constellation/hygastra/z/{{ page_number }}" style="text-decoration:none">z</a>
+            {% endif %}
+        </th>
         <th>
             {% if sort_column != 'con' %}
                 <a href="/constellation/hygastra/con/{{ page_number }}">constellation</a>
@@ -93,6 +114,9 @@
         <td>{{ astra.mag }}</td>
         <td>{{ astra.name }}</td>
         <td>{{ astra.bayer_non_empty }}</td>
+        <td>{{ astra.x|round(6) if astra.x else '' }}</td>
+        <td>{{ astra.y|round(6) if astra.y else '' }}</td>
+        <td>{{ astra.z|round(6) if astra.z else '' }}</td>
         <td>
             <a href="/constellation/{{ astra.con }}">{{ astra.con }}</a>
         </td>

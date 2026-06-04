@@ -3,17 +3,20 @@ from markupsafe import Markup
 import json
 import os
 import constellation_repository as repo
+import astra_router as ar
+from waitress import serve
 
 app = Flask(__name__)
 
 repository = repo.ConstellationRepository()
+astra_router = ar.AstraRouter()
 
 @app.route("/constellation")
 def home():
    return render_template("index.html")
 
 @app.route("/constellation/map")
-def map():
+def astra_map():
   constellations = repository.get_all_constellations_geojson()
   constellations_geojson = {"type": "FeatureCollection", "features": constellations}
 
@@ -33,7 +36,7 @@ def map():
                             astra=stars_geojson)
 
 @app.route("/constellation/list")
-def list():
+def astra_list():
   constellations = repository.get_all_constellations()
   row_count = len(constellations) // 3
   constellations = [constellations[:row_count], constellations[row_count:row_count * 2], constellations[row_count * 2:]]
@@ -72,7 +75,27 @@ def hygastra(sort_column, page_number):
                           page_number=page_number, 
                           page_numbers=page_numbers)
 
+@app.route("/constellation/astra_route", methods=["GET", "POST"])
+def astra_route():
+   origin_id = None
+   destination_id = None
+   max_step_length = None
+   astra_route_items = []
+   if request.method == "POST":
+      origin_id = request.form.get("origin_id")
+      destination_id = request.form.get("destination_id")
+      max_step_length = request.form.get("max_step_length");
+      if origin_id and destination_id and max_step_length:
+         astra_route_items = astra_router.get_route(int(origin_id), int(destination_id), int(max_step_length))
+         #astra_route_items = repository.get_hygdata_by_star_ids(list(map(lambda x: x.star_id, astra_route_items)))
+   return render_template("astra_route.html",
+                            origin_id=origin_id,
+                            destination_id=destination_id,
+                            max_step_length=max_step_length,
+                            astra_route_items=astra_route_items)
+
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("Сервер запущен на порту 8081...")
+    serve(app, host='127.0.0.1', port=8081)

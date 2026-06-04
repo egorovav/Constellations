@@ -20,6 +20,9 @@ class HygData(Base):
     con = Column(String(10))
     lon = Column(Float)
     star_id = Column(BigInteger, primary_key=True)
+    x = Column(Float)
+    y = Column(Float)
+    z = Column(Float)
     
     @property
     def lon_rounded(self):
