@@ -6,6 +6,7 @@ repository = repo.ConstellationRepository()
 class AstraRouter:
     def __init__(self):
         self.all_coordinates = repository.get_all_coordinates()
+        self.max_route_steps = 100
 
     def get_route(self, origin_id, destination_id, max_step_length):
         origin = next((x for x in self.all_coordinates if x.star_id == origin_id), None)
@@ -15,6 +16,11 @@ class AstraRouter:
         for point in self.all_coordinates:
             point.skip = 0
         return route
+    
+    def get_distance_by_id(self, origin_id, destination_id):
+        origin = next((x for x in self.all_coordinates if x.star_id == origin_id), None)
+        destination = next((x for x in self.all_coordinates if x.star_id == destination_id), None)
+        return round(AstraRouter.get_distance(origin, destination), 4)
 
     @staticmethod
     def get_cube(coordinates, o, edge_size):
@@ -23,6 +29,9 @@ class AstraRouter:
     @staticmethod
     def get_distance(astra1, astra2):
         return sqrt((astra1.x - astra2.x)**2 + (astra1.y - astra2.y)**2 + (astra1.z - astra2.z)**2)
+
+    def match(self, origin_row, destination_row, max_step_length):
+        return self.get_distance(origin_row, destination_row) <= max_step_length
 
     def find(self, coordinates, astra, destination, max_step_length):
         min_distance = max_step_length + self.get_distance(astra, destination)
@@ -41,20 +50,20 @@ class AstraRouter:
 
     def find_route(self, origin, destination, max_step_length, coordinates, result):
         d = self.get_distance(origin, destination)
-        if d <= max_step_length:
-            if len(result) < 1000:
-                destination.dist = round(d, 4)
+        if d < max_step_length:
+            if len(result) < self.max_route_steps:
+                destination.dist = round(self.get_distance(origin, destination), 4)
                 result.append(destination)
             else:
-                result = []
+                result.clear()
         else:
             anywhere = self.find(coordinates, origin, destination, max_step_length)
             if anywhere:
-                if len(result) < 1000:
+                if len(result) < self.max_route_steps:
                     result.append(anywhere)
                     self.find_route(anywhere, destination, max_step_length, coordinates, result)
                 else:
-                    result = []
+                    result.clear()
             else: 
                 if len(result) > 0:
                     a = result.pop()

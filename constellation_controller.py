@@ -82,17 +82,21 @@ def astra_route():
    max_step_length = None
    astra_route_items = []
    if request.method == "POST":
-      origin_id = request.form.get("origin_id")
-      destination_id = request.form.get("destination_id")
-      max_step_length = request.form.get("max_step_length");
+      origin_id = int(request.form.get("origin_id"))
+      destination_id = int(request.form.get("destination_id"))
+      max_step_length = int(request.form.get("max_step_length"))
       if origin_id and destination_id and max_step_length:
-         astra_route_items = astra_router.get_route(int(origin_id), int(destination_id), int(max_step_length))
+         astra_route_items = astra_router.get_route(origin_id, destination_id, max_step_length)
+         total_distance = sum(astra.dist for astra in astra_route_items)
+         direct_distance = astra_router.get_distance_by_id(origin_id, destination_id)
          #astra_route_items = repository.get_hygdata_by_star_ids(list(map(lambda x: x.star_id, astra_route_items)))
    return render_template("astra_route.html",
                             origin_id=origin_id,
                             destination_id=destination_id,
                             max_step_length=max_step_length,
-                            astra_route_items=astra_route_items)
+                            astra_route_items=astra_route_items,
+                            total_distance=round(total_distance, 4),
+                            direct_distance=direct_distance)
 
 
 

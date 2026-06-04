@@ -9,19 +9,19 @@
     <form action="{{ url_for('astra_route') }}" method="POST">
     <table cellspacing="10">
         <tr>
-            <td>Origin ID:</td><td><input type="number" name="origin_id" /></td>
+            <td>Origin ID:</td><td><input type="number" name="origin_id" value="{{ origin_id }}"  /></td>
         </tr>
         <tr>
-            <td>Destination ID:</td><td><input type="number" name="destination_id" /></td>
+            <td>Destination ID:</td><td><input type="number" name="destination_id" value="{{ destination_id }}" /></td>
         </tr>
         <tr>
-            <td>Max step length:</td><td><input type="text" name="max_step_length" /></td>
+            <td>Max step length:</td><td><input type="text" name="max_step_length" value="{{ max_step_length }}" /></td>
         </tr>
         <tr><td colspan="2"><button type="submit">Search route</button></td></tr>
     </table>
     </form>
     {% if origin_id is not none %}
-        <h4>Route from {{ origin_id }} to {{ destination_id }} with max step length {{ max_step_length }}.</h4>
+        <h4>Route from {{ origin_id }} to {{ destination_id }} (dir. dist. {{ direct_distance }}) with max step length {{ max_step_length }}.</h4>
         {% if astra_route_items %}
             <table cellspacing="3">
                 <tr>
@@ -40,6 +40,8 @@
                     <td>{{ astra.dist }}</td>
                 </tr>
             {% endfor %}
+            <tr><td colspan="5">Direct distance: {{ direct_distance }}</td></tr>
+            <tr><td colspan="5">Total route distance: {{ total_distance }}</td></tr>
             </table>
         {% else %}
             <p style="color: red;">Route not found.</p>
