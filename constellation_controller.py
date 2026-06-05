@@ -79,8 +79,10 @@ def hygastra(sort_column, page_number):
 def astra_route():
    origin_id = None
    destination_id = None
-   max_step_length = None
+   max_step_length = 0
    astra_route_items = []
+   total_distance = 0
+   direct_distance = 0
    if request.method == "POST":
       origin_id = int(request.form.get("origin_id"))
       destination_id = int(request.form.get("destination_id"))

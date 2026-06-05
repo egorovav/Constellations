@@ -15,7 +15,7 @@
             <td>Destination ID:</td><td><input type="number" name="destination_id" value="{{ destination_id }}" /></td>
         </tr>
         <tr>
-            <td>Max step length:</td><td><input type="text" name="max_step_length" value="{{ max_step_length }}" /></td>
+            <td>Max step length:</td><td><input type="number" name="max_step_length" value="{{ max_step_length }}" /></td>
         </tr>
         <tr><td colspan="2"><button type="submit">Search route</button></td></tr>
     </table>
@@ -25,6 +25,7 @@
         {% if astra_route_items %}
             <table cellspacing="3">
                 <tr>
+                    <th>#</th>
                     <th>id</th>
                     <th>x</th>
                     <th>y</th>
@@ -33,6 +34,7 @@
                 </tr>
             {% for astra in astra_route_items %}
                 <tr>
+                    <td><b>{{ loop.index }}</b></td>
                     <td>{{ astra.star_id }}</td>
                     <td>{{ astra.x }}</td>
                     <td>{{ astra.y }}</td>
